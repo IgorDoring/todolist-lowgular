@@ -21,6 +21,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.todolist$ = this.getTasks()
+    this.http.get<Task[]>("https://api.todoist.com/rest/v2/tasks",{
+      headers: {
+        "Authorization":"Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37",
+        "Content-Type": "application/json",
+        "X-Request-Id": "2335869742"
+      }
+    }).subscribe(
+      (res) => {
+        console.log(res)
+      }
+    )
   }
 
   getTasks() {
