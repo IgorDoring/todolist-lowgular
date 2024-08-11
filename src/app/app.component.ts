@@ -1,30 +1,29 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Task } from './model/task';
+import { map, Observable } from 'rxjs';
+import { Task, TaskResponse } from './model/task';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, AsyncPipe],
+  imports: [RouterOutlet, AsyncPipe, CommonModule, HttpClientModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   title = 'todolist-lowgular';
+  todolist$!: Observable<TaskResponse[]>;
 
-  todolist$: Observable<Task[]> | undefined;
-
-  constructor(private http: HttpClient) {}
+  private http: HttpClient = inject(HttpClient)
 
   ngOnInit(): void {
-    this.todolist$ = this.getTasks()
+    this.getTasks()
   }
 
   getTasks() {
-    return this.http.get<Task[]>("https://api.todoist.com/rest/v2/tasks", {
+    this.todolist$ = this.http.get<TaskResponse[]>("https://api.todoist.com/rest/v2/tasks", {
       headers: {
         "Authorization":"Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37",
         "Content-Type": "application/json",
