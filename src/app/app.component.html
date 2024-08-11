@@ -2,11 +2,11 @@
   <header>
     <h1>Checklist</h1>
   </header>
-  <section class="paper container container-sm shadow">
+  <section class="paper container container-xs shadow">
     <h3 class="margin-small">Remember to</h3>
     <ul>
       @for (todo of (todolist$ | async); track todo) {
-        <li>{{ todo.content }}</li>
+        <li [ngClass]="{'completed': todo.is_completed}">{{ todo.content }}</li>
       }
     </ul>
     <hr>
