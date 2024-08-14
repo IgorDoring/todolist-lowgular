@@ -14,14 +14,20 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  todolist$!: Observable<TaskResponse[]>;
-  readonly projectId = '2335869742';
   private http: HttpClient = inject(HttpClient)
-  newTask = '';
+  todolist$: Observable<TaskResponse[]> = this.http.get<TaskResponse[]>("https://api.todoist.com/rest/v2/tasks", {
+    headers: {
+      "Authorization":"Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37",
+      "Content-Type": "application/json",
+      "X-Request-Id": "2335869742"
+    }
+  }).pipe(
+    tap(res => console.log('todolist$',res))
+  )
+  readonly projectId = '2335869742';
   taskForm = {project_id: this.projectId, content: ''}
 
   ngOnInit(): void {
-    this.getTasks()
   }
 
   addTask(taskForm: NgForm){
@@ -32,19 +38,10 @@ export class AppComponent implements OnInit {
         "Content-Type": "application/json",
         "X-Request-Id": "2335869742"
       }
-    }).subscribe({next: () => {
-      this.getTasks()
-    }})
+    }).subscribe({
+      next: res => console.log('addtask()',res)
+    })
   }
 }
 
-  getTasks() {
-    this.todolist$ = this.http.get<TaskResponse[]>("https://api.todoist.com/rest/v2/tasks", {
-      headers: {
-        "Authorization":"Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37",
-        "Content-Type": "application/json",
-        "X-Request-Id": "2335869742"
-      }
-    })
-  }
 }

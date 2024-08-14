@@ -6,7 +6,7 @@
     @if(todolist$ | async; as todolist){
       <h4 class="margin-small">Remember to</h4>
       <ul>
-        @for (todo of todolist; track $index) {
+        @for (todo of todolist; track todo) {
           <li [ngClass]="{'completed': todo.is_completed}">{{ todo.content }}</li>
         }
         <li class="completed">Add music to playlist</li>
@@ -20,7 +20,7 @@
         </div>
       </form>
     }@else{
-      <p>Talking with mom...</p>
+      <p>Calling mom...</p>
     }
   </section>
 </main>
