@@ -4,56 +4,30 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { TaskResponse } from '../../model/task';
+import { TaskService } from '../service/task.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, HttpClientModule, FormsModule],
+  providers: [TaskService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  private http: HttpClient = inject(HttpClient);
-  readonly projectId = '2335869742';
-  readonly headers = {
-    headers: {
-      'Authorization': 'Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37',
-      'Content-Type': 'application/json',
-      'X-Request-Id': '2335869742',
-    },
-  };
-  taskForm = { project_id: this.projectId, content: '' };
-  listSubject: BehaviorSubject<TaskResponse[]> = new BehaviorSubject<
-    TaskResponse[]
-  >([]);
-  todolist$: Observable<TaskResponse[]> = this.listSubject.asObservable();
+  taskForm = { project_id: this.taskService.projectId, content: '' };
+  todolist$: Observable<TaskResponse[]> =
+    this.taskService.listSubject.asObservable();
+
+  constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {
-    this.loadTasks();
+    this.taskService.loadTasks();
   }
 
   addTask(taskForm: NgForm) {
     if (taskForm.valid) {
-      this.http
-        .post<TaskResponse>(
-          'https://api.todoist.com/rest/v2/tasks',
-          JSON.stringify(this.taskForm),
-          this.headers
-        )
-        .pipe(
-          tap((newTask) => {
-            const currentTasks: TaskResponse[] = this.listSubject.getValue();
-            this.listSubject.next([...currentTasks, newTask]);
-          })
-        )
-        .subscribe();
+      this.taskService.addTask(JSON.stringify(this.taskForm));
     }
-  }
-
-  loadTasks() {
-    this.http
-      .get<TaskResponse[]>('https://api.todoist.com/rest/v2/tasks', this.headers)
-      .pipe(tap((tasks) => this.listSubject.next(tasks)))
-      .subscribe();
   }
 }
