@@ -1,28 +1,26 @@
-<section class="paper container container-xs shadow">
-  @if(todolist$ | async; as todolist){
-  <h4 class="margin-small">Remember to</h4>
-  <ul>
-    @for (todo of todolist; track todo) {
-    <li [ngClass]="{ completed: todo.is_completed }">{{ todo.content }}</li>
-    }
-    <li class="completed">Add music to playlist</li>
-    <li class="completed">Go to the gym</li>
-  </ul>
-  <hr class="margin" />
-  <form #myForm="ngForm" (ngSubmit)="addTask(myForm)">
-    <div class="row flex-center">
-      <input
-        type="text"
-        placeholder="Mom also said"
-        [(ngModel)]="taskForm.content"
-        required
-        minlength="3"
-        name="task"
-      />
-      <input type="submit" [disabled]="myForm.invalid" />
-    </div>
-  </form>
-  }@else{
-  <p>Calling mom...</p>
+@if(todolist$ | async; as todolist){
+<h4 class="margin-small">Remember to</h4>
+<ul>
+  @for (todo of todolist; track todo) {
+  <li [ngClass]="{ completed: todo.is_completed }">{{ todo.content }}</li>
   }
-</section>
+  <li class="completed">Add music to playlist</li>
+  <li class="completed">Go to the gym</li>
+</ul>
+<hr class="margin" />
+<form #myForm="ngForm" (ngSubmit)="addTask(myForm)">
+  <div class="row flex-center">
+    <input
+      type="text"
+      placeholder="Mom also said"
+      [(ngModel)]="taskForm.content"
+      required
+      minlength="3"
+      name="task"
+    />
+    <input type="submit" [disabled]="myForm.invalid" />
+  </div>
+</form>
+}@else{
+<p>Calling mom...</p>
+}
