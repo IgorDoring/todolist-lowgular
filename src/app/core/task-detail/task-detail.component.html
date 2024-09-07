@@ -1,10 +1,12 @@
-<h4 class="margin-top-small">Task Details</h4>
-@if (task$ | async; as task) {
-    <p> {{task.content}} </p>
+<section class="paper container container-xs">
+  <h4 class="margin-top-small">Task Details</h4>
+  @if (task$ | async; as task) {
+    <p>{{ task.content }}</p>
     <div class="row">
-        <a class="paper-btn col" [routerLink]="['/', 'edit', task.id]">Edit</a>
-        <a class="paper-btn col" [routerLink]="['/']">Back to list</a>
+      <a class="paper-btn col" [routerLink]="['/', 'edit', task.id]">Edit</a>
+      <a class="paper-btn col" [routerLink]="['/']">Back to list</a>
     </div>
-}@else {
+  } @else {
     <p>Loading...</p>
-}
+  }
+</section>

@@ -1,16 +1,26 @@
-<h4 class="margin-none">Edit Task</h4>
-@if (task$ | async; as task) {
-  <form (ngSubmit)="onSubmit(myForm)" #myForm="ngForm">
-    <div class="form-group">
-      <input required type="text" name="content" [(ngModel)]="taskForm.content" />
-    </div>
-    <div class="form-group margin-top-small">
-      <input type="submit" class="paper-btn" [disabled]="myForm.invalid" />
-    </div>
-    <a class="paper-btn" [routerLink]="['/', 'details', task.id]">
+<section class="paper container container-xs">
+  <h4 class="margin-none">Edit Task</h4>
+  @if (task$ | async; as task) {
+    <form (ngSubmit)="onSubmit(myForm)" #myForm="ngForm">
+      <div class="form-group">
+        <input
+          required
+          type="text"
+          name="content"
+          [(ngModel)]="taskForm.content"
+        />
+      </div>
+      <div class="form-group margin-top-small">
+        <input type="submit" class="paper-btn" [disabled]="myForm.invalid" />
+      </div>
+    </form>
+    <button
+      class="paper-btn btn-block"
+      [routerLink]="['/', 'details', task.id]"
+    >
       Back to details
-    </a>
-  </form>
-} @else {
-  <p>Loading...</p>
-}
+    </button>
+  } @else {
+    <p>Loading...</p>
+  }
+</section>
