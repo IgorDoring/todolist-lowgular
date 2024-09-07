@@ -32,9 +32,9 @@ export class TaskService {
       .subscribe();
   }
 
-  loadTask() {
+  loadTask(taskId: string) {
     return this.http.get<TaskResponse>(
-      'https://api.todoist.com/rest/v2/tasks/' + '8190680566',
+      'https://api.todoist.com/rest/v2/tasks/' + taskId,
       this.headers,
     );
   }
