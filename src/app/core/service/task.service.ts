@@ -37,6 +37,7 @@ export class TaskService {
     );
   }
 
+  //TODO: use behavior subject
   editTask(taskId: number, taskForm: string) {
     return this.http.post<TaskResponse>(
       'https://api.todoist.com/rest/v2/tasks/' + taskId,
@@ -59,5 +60,19 @@ export class TaskService {
         }),
       )
       .subscribe();
+  }
+
+  // TODO: Use behavior subject
+  completeTask(taskId: string) {
+    return this.http.post(
+      'https://api.todoist.com/rest/v2/tasks/' + taskId + '/close',
+      null,
+      {
+        headers: {
+          Authorization: 'Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37',
+          'X-Request-Id': '2335869742',
+        },
+      },
+    );
   }
 }
