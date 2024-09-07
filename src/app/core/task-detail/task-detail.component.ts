@@ -1,7 +1,7 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TaskResponse } from '../../model/task.model';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { TaskService } from '../service/task.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -12,11 +12,9 @@ import { RouterModule } from '@angular/router';
   imports: [HttpClientModule, CommonModule, RouterModule],
   providers: [TaskService],
   templateUrl: './task-detail.component.html',
-  styleUrl: './task-detail.component.scss'
+  styleUrl: './task-detail.component.scss',
 })
 export class TaskDetailComponent {
-  
-  taskService = inject(TaskService)
-  task$: Observable<TaskResponse> = this.taskService.loadTask()
-  
+  taskService = inject(TaskService);
+  task$: Observable<TaskResponse> = this.taskService.loadTask();
 }

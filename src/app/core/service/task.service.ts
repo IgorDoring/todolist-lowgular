@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { TaskResponse } from '../../model/task.model';
 import { BehaviorSubject, tap } from 'rxjs';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgForm } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +26,7 @@ export class TaskService {
     this.http
       .get<TaskResponse[]>(
         'https://api.todoist.com/rest/v2/tasks',
-        this.headers
+        this.headers,
       )
       .pipe(tap((tasks: TaskResponse[]) => this.listSubject.next(tasks)))
       .subscribe();
@@ -36,7 +35,7 @@ export class TaskService {
   loadTask() {
     return this.http.get<TaskResponse>(
       'https://api.todoist.com/rest/v2/tasks/' + '8190680566',
-      this.headers
+      this.headers,
     );
   }
 
@@ -45,13 +44,13 @@ export class TaskService {
       .post<TaskResponse>(
         'https://api.todoist.com/rest/v2/tasks',
         taskForm,
-        this.headers
+        this.headers,
       )
       .pipe(
         tap((newTask) => {
           const currentTasks: TaskResponse[] = this.listSubject.getValue();
           this.listSubject.next([...currentTasks, newTask]);
-        })
+        }),
       )
       .subscribe();
   }

@@ -9,15 +9,15 @@ export const routes: Routes = [
     redirectTo: 'home',
   },
   {
-    path: "home",
-    component: HomeComponent
+    path: 'home',
+    component: HomeComponent,
   },
   {
-    path: "details/:id",
-    component: TaskDetailComponent
+    path: 'details/:id',
+    component: TaskDetailComponent,
   },
   {
-    path: "**",
-    redirectTo: "home"
-  }
+    path: '**',
+    redirectTo: 'home',
+  },
 ];

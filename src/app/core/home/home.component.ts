@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TaskResponse } from '../../model/task.model';
 import { TaskService } from '../service/task.service';
 import { RouterModule } from '@angular/router';
@@ -15,7 +15,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   taskForm = { project_id: this.taskService.projectId, content: '' };
   todolist$: Observable<TaskResponse[]> =
     this.taskService.listSubject.asObservable();
