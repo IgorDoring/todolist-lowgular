@@ -6,7 +6,7 @@ export interface TaskResponse{
     priority: number,
 }
 
-export interface Task {
+export interface TaskModel {
     isCompleted: boolean,
     content: string,
     id: string,
