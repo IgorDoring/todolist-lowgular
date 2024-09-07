@@ -20,8 +20,6 @@ export class TaskService {
     TaskResponse[]
   >([]);
 
-  constructor() {}
-
   loadTasks() {
     this.http
       .get<TaskResponse[]>(
@@ -35,6 +33,14 @@ export class TaskService {
   loadTask(taskId: string) {
     return this.http.get<TaskResponse>(
       'https://api.todoist.com/rest/v2/tasks/' + taskId,
+      this.headers,
+    );
+  }
+
+  editTask(taskId: number, taskForm: string) {
+    return this.http.post<TaskResponse>(
+      'https://api.todoist.com/rest/v2/tasks/' + taskId,
+      taskForm,
       this.headers,
     );
   }
