@@ -3,13 +3,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { TaskResponse } from '../../model/task';
+import { TaskResponse } from '../../model/task.model';
 import { TaskService } from '../service/task.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, RouterModule],
   providers: [TaskService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

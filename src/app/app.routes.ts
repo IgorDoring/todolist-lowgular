@@ -13,7 +13,11 @@ export const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: "detail/:id",
+    path: "details/:id",
     component: TaskDetailComponent
+  },
+  {
+    path: "**",
+    redirectTo: "home"
   }
 ];

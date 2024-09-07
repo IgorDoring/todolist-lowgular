@@ -2,7 +2,9 @@
 <h4 class="margin-small">Remember to</h4>
 <ul>
   @for (todo of todolist; track todo) {
-  <li [ngClass]="{ completed: todo.is_completed }">{{ todo.content }}</li>
+  <li class="" [ngClass]="{ completed: todo.is_completed }">
+    <a [routerLink]="['/', 'details', todo.id]">{{ todo.content }}</a>
+  </li>
   }
   <li class="completed">Add music to playlist</li>
   <li class="completed">Go to the gym</li>
@@ -22,5 +24,5 @@
   </div>
 </form>
 }@else{
-<p>Calling mom...</p>
+<p>Loading...</p>
 }

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { TaskResponse } from '../../model/task';
+import { TaskResponse } from '../../model/task.model';
 import { BehaviorSubject, tap } from 'rxjs';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -31,6 +31,13 @@ export class TaskService {
       )
       .pipe(tap((tasks: TaskResponse[]) => this.listSubject.next(tasks)))
       .subscribe();
+  }
+
+  loadTask() {
+    return this.http.get<TaskResponse>(
+      'https://api.todoist.com/rest/v2/tasks/' + '8190680566',
+      this.headers
+    );
   }
 
   addTask(taskForm: string) {

@@ -1,18 +1,22 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TaskResponse } from '../../model/task';
+import { TaskResponse } from '../../model/task.model';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TaskService } from '../service/task.service';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [HttpClientModule],
+  imports: [HttpClientModule, CommonModule, RouterModule],
   providers: [TaskService],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.scss'
 })
 export class TaskDetailComponent {
-  task$!: Observable<TaskResponse>
+  
+  taskService = inject(TaskService)
+  task$: Observable<TaskResponse> = this.taskService.loadTask()
   
 }
