@@ -64,14 +64,7 @@ export class TaskService {
         taskForm,
         this.headers,
       )
-      .pipe(
-        tap((editedTask) => {
-          const currentTasks: TaskResponse[] = this.listSubject
-            .getValue()
-            .map((task) => (task.id == editedTask.id ? editedTask : task));
-          console.log(currentTasks);
-        }),
-      )
+      .pipe(tap((editedTask) => console.log(editedTask)))
       .subscribe({
         next: (task) => {
           this.router.navigate(['/', 'details', task.id]);
