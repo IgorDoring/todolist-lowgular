@@ -32,14 +32,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // TODO: remove window.location, not used in SPA
   completeTask(taskId: string) {
     if (confirm('Have you really completed this task?')) {
-      this.taskService.completeTask(taskId).subscribe({
-        next: () => {
-          window.location.reload();
-        },
-      });
+      this.taskService.completeTask(taskId);
     }
   }
 }

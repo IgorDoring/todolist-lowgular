@@ -34,13 +34,10 @@ export class TaskEditComponent {
 
   onSubmit(taskForm: NgForm) {
     if (taskForm.valid) {
-      this.taskService
-        .editTask(this.taskForm.id, JSON.stringify(this.taskForm))
-        .subscribe({
-          next: () => {
-            this.router.navigate(['/', 'details', this.taskForm.id]);
-          },
-        });
+      this.taskService.editTask(
+        this.taskForm.id,
+        JSON.stringify(this.taskForm),
+      );
     }
   }
 }
