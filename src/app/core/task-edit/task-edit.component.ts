@@ -19,13 +19,13 @@ export class TaskEditComponent {
   taskService: TaskService = inject(TaskService);
   router: Router = inject(Router);
   task$!: Observable<TaskResponse>;
-  taskForm!: { id: number; content: string };
+  taskForm!: { id: string; content: string };
 
   @Input() set id(id: string) {
     this.task$ = this.taskService.loadTask(id).pipe(
       tap((task) => {
         this.taskForm = {
-          id: +task.id,
+          id: task.id,
           content: task.content,
         };
       }),
@@ -34,10 +34,13 @@ export class TaskEditComponent {
 
   onSubmit(taskForm: NgForm) {
     if (taskForm.valid) {
-      this.taskService.editTask(
-        this.taskForm.id,
-        JSON.stringify(this.taskForm),
-      );
+      this.taskService
+        .editTask(this.taskForm.id, JSON.stringify(this.taskForm))
+        .subscribe({
+          next: (task) => {
+            this.router.navigate(['/', 'details', task.id]);
+          },
+        });
     }
   }
 }

@@ -1,3 +1,4 @@
+
 <section class="container container-xs">
   @if (todolist$ | async; as todolist) {
     <h4 class="margin-small">Remember to</h4>
@@ -19,9 +20,6 @@
           </button>
         </div>
       </div>
-      <!-- <li class="" [ngClass]="{ completed: todo.is_completed }">
-    <a [routerLink]="['/', 'details', todo.id]">{{ todo.content }}</a>
-  </li> -->
     }
     <hr class="margin" />
     <form #myForm="ngForm" (ngSubmit)="addTask(myForm)">
