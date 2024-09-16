@@ -22,19 +22,7 @@
       </div>
     }
     <hr class="margin" />
-    <form #myForm="ngForm" (ngSubmit)="addTask(myForm)">
-      <div class="row flex-center">
-        <input
-          type="text"
-          placeholder="Mom also said"
-          [(ngModel)]="taskForm.content"
-          required
-          minlength="3"
-          name="task"
-        />
-        <input type="submit" [disabled]="myForm.invalid" />
-      </div>
-    </form>
+    <app-task-add/>
   } @else {
     <p>Loading...</p>
   }

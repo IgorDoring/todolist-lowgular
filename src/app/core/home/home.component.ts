@@ -1,26 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { TaskResponse } from '../../model/task.model';
 import { TaskService } from '../service/task.service';
 import { RouterModule } from '@angular/router';
+import { TaskAddComponent } from '../task-add/task-add.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    FormsModule,
+    RouterModule,
+    TaskAddComponent,
+  ],
   providers: [TaskService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
+  taskService: TaskService = inject(TaskService);
   taskForm = { project_id: this.taskService.projectId, content: '' };
   todolist$: Observable<TaskResponse[]> =
     this.taskService.listSubject.asObservable();
-
-  constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {
     this.taskService.loadTasks();
