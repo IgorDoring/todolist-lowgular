@@ -16,7 +16,7 @@ export class TaskAddComponent {
 
   addTask(taskForm: NgForm) {
     if (taskForm.valid) {
-      this.taskService.addTask(JSON.stringify(this.taskForm)).subscribe();
+      this.taskService.addTask(JSON.stringify(this.taskForm));
     }
   }
 }

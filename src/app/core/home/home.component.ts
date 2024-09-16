@@ -32,12 +32,6 @@ export class HomeComponent implements OnInit {
     this.taskService.loadTasks();
   }
 
-  addTask(taskForm: NgForm) {
-    if (taskForm.valid) {
-      this.taskService.addTask(JSON.stringify(this.taskForm)).subscribe();
-    }
-  }
-
   completeTask(taskId: string) {
     if (confirm('Have you really completed this task?')) {
       this.taskService.completeTask(taskId).subscribe({
