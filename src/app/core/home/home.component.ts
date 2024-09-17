@@ -18,7 +18,6 @@ import { TaskAddComponent } from '../task-add/task-add.component';
     RouterModule,
     TaskAddComponent,
   ],
-  providers: [TaskService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

@@ -1,13 +1,21 @@
-import { computed, inject, Injectable, Signal } from '@angular/core';
+import {
+  computed,
+  inject,
+  Injectable,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { TaskResponse } from '../../model/task.model';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
+  private router: Router = inject(Router);
   private http: HttpClient = inject(HttpClient);
   readonly projectId = '2335869742';
   readonly headers = {
@@ -25,15 +33,9 @@ export class TaskService {
     { initialValue: [] },
   );
 
-  loadTasks() {
-    return this.listSignal();
-  }
-
   loadTask(taskId: string) {
-    return this.http.get<TaskResponse>(
-      'https://api.todoist.com/rest/v2/tasks/' + taskId,
-      this.headers,
-    );
+    const task = this.listSignal().find((task) => task.id === taskId);
+    return task;
   }
 
   addTask(taskForm: string) {
@@ -50,16 +52,26 @@ export class TaskService {
       });
   }
 
-  //TODO: use behavior subject
+  //TODO: implement reactivity
   editTask(taskId: string, taskForm: string) {
-    return this.http.post<TaskResponse>(
-      'https://api.todoist.com/rest/v2/tasks/' + taskId,
-      taskForm,
-      this.headers,
-    );
+    this.http
+      .post<TaskResponse>(
+        'https://api.todoist.com/rest/v2/tasks/' + taskId,
+        taskForm,
+        this.headers,
+      )
+      .subscribe({
+        next: (eTask) => {
+          const eTaskIndex = this.listSignal().findIndex(
+            (task) => task.id == eTask.id,
+          );
+          this.listSignal()[eTaskIndex] = eTask;
+          this.router.navigate(['/', 'details', taskId]);
+        },
+      });
   }
 
-  // TODO: Use behavior subject
+  // TODO: implement reactivity
   completeTask(taskIndex: number) {
     this.http
       .post(

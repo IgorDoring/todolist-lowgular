@@ -11,36 +11,33 @@ import { FormsModule, NgForm } from '@angular/forms';
   selector: 'app-task-edit',
   standalone: true,
   imports: [HttpClientModule, CommonModule, RouterModule, FormsModule],
-  providers: [TaskService],
   templateUrl: './task-edit.component.html',
   styleUrl: './task-edit.component.scss',
 })
 export class TaskEditComponent {
   taskService: TaskService = inject(TaskService);
-  router: Router = inject(Router);
-  task$!: Observable<TaskResponse>;
+  task!: TaskResponse | undefined;
   taskForm!: { id: string; content: string };
 
   @Input() set id(id: string) {
-    this.task$ = this.taskService.loadTask(id).pipe(
-      tap((task) => {
-        this.taskForm = {
-          id: task.id,
-          content: task.content,
-        };
-      }),
-    );
+    this.task = this.taskService.loadTask(id);
+    this.taskForm = { id: this.task!.id, content: this.task!.content };
+    // this.task$ = this.taskService.loadTask(id).pipe(
+    //   tap((task) => {
+    //     this.taskForm = {
+    //       id: task.id,
+    //       content: task.content,
+    //     };
+    //   }),
+    // );
   }
 
   onSubmit(taskForm: NgForm) {
     if (taskForm.valid) {
-      this.taskService
-        .editTask(this.taskForm.id, JSON.stringify(this.taskForm))
-        .subscribe({
-          next: (task) => {
-            this.router.navigate(['/', 'details', task.id]);
-          },
-        });
+      this.taskService.editTask(
+        this.taskForm.id,
+        JSON.stringify(this.taskForm),
+      );
     }
   }
 }

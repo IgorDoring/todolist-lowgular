@@ -1,6 +1,6 @@
 <section class="paper container container-xs">
   <h4 class="margin-none">Edit Task</h4>
-  @if (task$ | async; as task) {
+  @if (task !== undefined) {
     <form (ngSubmit)="onSubmit(myForm)" #myForm="ngForm">
       <div class="form-group">
         <input

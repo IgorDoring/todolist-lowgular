@@ -1,6 +1,6 @@
 <section class="paper container container-xs">
   <h4 class="margin-top-small">Task Details</h4>
-  @if (task$ | async; as task) {
+  @if (task !== undefined) {
     <p>{{ task.content }}</p>
     <div class="row">
       <a class="paper-btn col" [routerLink]="['/', 'edit', task.id]">Edit</a>
