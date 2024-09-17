@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { Component, inject, OnInit, Signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { TaskResponse } from '../../model/task.model';
 import { TaskService } from '../service/task.service';
@@ -22,21 +22,16 @@ import { TaskAddComponent } from '../task-add/task-add.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   taskService: TaskService = inject(TaskService);
-  taskForm = { project_id: this.taskService.projectId, content: '' };
-  todolist$: Observable<TaskResponse[]> =
-    this.taskService.listSubject.asObservable();
-
-  ngOnInit(): void {
-    this.taskService.loadTasks();
-  }
+  todolist: Signal<TaskResponse[]> = this.taskService.listSignal;
 
   completeTask(taskId: string) {
     if (confirm('Have you really completed this task?')) {
-      this.taskService.completeTask(taskId).subscribe({
-        next: () => this.taskService.loadTasks(),
-      });
+      // this.taskService.completeTask(taskId).subscribe({
+      //   next: () => this.taskService.loadTasks(),
+      // });
+      console.log(this.taskService.listSignal());
     }
   }
 }

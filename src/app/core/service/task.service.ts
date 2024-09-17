@@ -1,7 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, Signal } from '@angular/core';
 import { TaskResponse } from '../../model/task.model';
 import { BehaviorSubject, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -16,22 +17,16 @@ export class TaskService {
       'X-Request-Id': '2335869742',
     },
   };
-  listSubject: BehaviorSubject<TaskResponse[]> = new BehaviorSubject<
-    TaskResponse[]
-  >([]);
+  listSignal: Signal<TaskResponse[]> = toSignal(
+    this.http.get<TaskResponse[]>(
+      'https://api.todoist.com/rest/v2/tasks',
+      this.headers,
+    ),
+    { initialValue: [] },
+  );
 
   loadTasks() {
-    this.http
-      .get<TaskResponse[]>(
-        'https://api.todoist.com/rest/v2/tasks',
-        this.headers,
-      )
-      .pipe(
-        tap((tasks: TaskResponse[]) => {
-          this.listSubject.next(tasks);
-        }),
-      )
-      .subscribe();
+    return this.listSignal();
   }
 
   loadTask(taskId: string) {
@@ -42,18 +37,17 @@ export class TaskService {
   }
 
   addTask(taskForm: string) {
-    return this.http
+    this.http
       .post<TaskResponse>(
         'https://api.todoist.com/rest/v2/tasks',
         taskForm,
         this.headers,
       )
-      .pipe(
-        tap((newTask) => {
-          const currentTasks: TaskResponse[] = this.listSubject.getValue();
-          this.listSubject.next([...currentTasks, newTask]);
-        }),
-      );
+      .subscribe({
+        next: (newTask) => {
+          this.listSignal().push(newTask);
+        },
+      });
   }
 
   //TODO: use behavior subject
