@@ -60,16 +60,24 @@ export class TaskService {
   }
 
   // TODO: Use behavior subject
-  completeTask(taskId: string) {
-    return this.http.post(
-      'https://api.todoist.com/rest/v2/tasks/' + taskId + '/close',
-      null,
-      {
-        headers: {
-          Authorization: 'Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37',
-          'X-Request-Id': '2335869742',
+  completeTask(taskIndex: number) {
+    this.http
+      .post(
+        'https://api.todoist.com/rest/v2/tasks/' +
+          this.listSignal()[taskIndex].id +
+          '/close',
+        null,
+        {
+          headers: {
+            Authorization: 'Bearer 4073e1ba35bd897d02b44a5ac75b019d0688be37',
+            'X-Request-Id': '2335869742',
+          },
         },
-      },
-    );
+      )
+      .subscribe({
+        next: () => {
+          this.listSignal().splice(taskIndex, 1);
+        },
+      });
   }
 }

@@ -26,12 +26,9 @@ export class HomeComponent {
   taskService: TaskService = inject(TaskService);
   todolist: Signal<TaskResponse[]> = this.taskService.listSignal;
 
-  completeTask(taskId: string) {
+  completeTask(taskIndex: number) {
     if (confirm('Have you really completed this task?')) {
-      // this.taskService.completeTask(taskId).subscribe({
-      //   next: () => this.taskService.loadTasks(),
-      // });
-      console.log(this.taskService.listSignal());
+      this.taskService.completeTask(taskIndex);
     }
   }
 }
