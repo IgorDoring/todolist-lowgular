@@ -1,8 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { TaskService } from '../service/task.service';
 import { TaskResponse } from '../../model/task.model';
-import { Observable, tap } from 'rxjs';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';

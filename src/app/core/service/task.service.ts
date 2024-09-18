@@ -1,12 +1,5 @@
-import {
-  computed,
-  inject,
-  Injectable,
-  Signal,
-  WritableSignal,
-} from '@angular/core';
+import { inject, Injectable, Signal } from '@angular/core';
 import { TaskResponse } from '../../model/task.model';
-import { BehaviorSubject, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';

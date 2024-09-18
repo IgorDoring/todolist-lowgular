@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, inject, OnInit, Signal } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { TaskResponse } from '../../model/task.model';
 import { TaskService } from '../service/task.service';
 import { RouterModule } from '@angular/router';
