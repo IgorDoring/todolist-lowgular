@@ -1,8 +1,9 @@
 import { inject, Injectable, Signal } from '@angular/core';
-import { TaskResponse } from '../../model/task.model';
+import { TaskModel, TaskResponse } from '../../model/task.model';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +19,20 @@ export class TaskService {
       'X-Request-Id': '2335869742',
     },
   };
-  listSignal: Signal<TaskResponse[]> = toSignal(
-    this.http.get<TaskResponse[]>(
-      'https://api.todoist.com/rest/v2/tasks',
-      this.headers,
-    ),
+  listSignal: Signal<TaskModel[]> = toSignal(
+    this.http
+      .get<
+        TaskResponse[]
+      >('https://api.todoist.com/rest/v2/tasks', this.headers)
+      .pipe(
+        map((tasks: TaskResponse[]) =>
+          tasks.map((task) => ({
+            id: task.id,
+            content: task.content,
+            isCompleted: task.is_completed,
+          })),
+        ),
+      ),
     { initialValue: [] },
   );
 
