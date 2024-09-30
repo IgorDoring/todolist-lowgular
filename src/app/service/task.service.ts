@@ -1,4 +1,4 @@
-import { inject, Injectable, Signal } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { TaskModel, TaskResponse } from '../model/task.model';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -35,7 +35,21 @@ export class TaskService {
       ),
     { initialValue: [] },
   );
+  filter: Signal<string> = signal('');
 
+  filterTasks() {
+    const filteredList: Signal<TaskModel[]> = computed(() => {
+      return this.listSignal().filter((task) => {
+        if (this.filter().trim() !== '') {
+          return task.content.toLocaleLowerCase().includes(this.filter());
+        }
+        return true;
+      });
+    });
+    return filteredList();
+  }
+
+  // TODO: add tosignal to get tasks
   loadTask(taskId: string) {
     const task = this.listSignal().find((task) => task.id === taskId);
     return task;

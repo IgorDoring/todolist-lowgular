@@ -2,6 +2,12 @@ h1, h2, h3, h4{
     text-align: center;
 }
 
+.filter-widget{
+    &-title{
+        text-align: left;
+    }
+}
+
 .completed{
     text-decoration: line-through;
     text-decoration-color: var(--primary);
