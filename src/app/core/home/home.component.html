@@ -1,6 +1,8 @@
 
 <section class="container container-xs">
   @if (todolist().length > 0) {
+    <app-task-add/>
+    <hr class="margin" />
     <h4 class="margin-small">Remember to</h4>
     @for (todo of todolist(); track id; let id = $index) {
       <div class="border padding-small margin-small">
@@ -21,8 +23,6 @@
         </div>
       </div>
     }
-    <hr class="margin" />
-    <app-task-add/>
   } @else {
     <p>Loading...</p>
   }
