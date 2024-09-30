@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { TaskService } from '../service/task.service';
+import { TaskService } from '../../service/task.service';
 import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({

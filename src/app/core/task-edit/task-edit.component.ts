@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { TaskService } from '../service/task.service';
+import { TaskService } from '../../service/task.service';
 import { TaskResponse } from '../../model/task.model';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
