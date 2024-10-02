@@ -1,50 +1,59 @@
-<section class="container container-xs">
-  <div class="filter-widget border border-2 padding margin">
-    <h4 class="filter-widget-title margin-small">Filter</h4>
-    <input
-      type="search"
-      name="filter"
-      placeholder="Search for task here"
-      [(ngModel)]="filter"
-      (keyup)="filterTasks()"
-    />
-    <h4 class="filter-widget-title margin-small">Sort by</h4>
-    <fieldset class="form-group row flex-middle flex-spaces">
-      <label for="Priority" class="paper-radio">
-        <input type="radio" name="paperRadios" id="Priority" [(ngModel)]="sortBy" (onclick)="filterTasks()" value="priority"> <span>Priority</span>
-      </label>
-      <label for="Date" class="paper-radio">
-        <input type="radio" name="paperRadios" id="Date" [(ngModel)]="sortBy" (onclick)="filterTasks()" value="date"> <span>Date</span>
-      </label>
-      <label for="noSort" class="paper-radio">
-        <input type="radio" name="paperRadios" id="noSort" [(ngModel)]="sortBy" (onclick)="filterTasks()" value=""> <span>Don't Sort</span>
-      </label>
-    </fieldset>
-  </div>
-  @if (todolist().length > 0) {
-    <app-task-add />
-    <hr class="margin" />
-    <h4 class="margin-small">Remember to</h4>
-    @for (todo of todolist(); track id; let id = $index) {
-      <div class="border padding-small margin-small">
-        <p>{{ todo.content }}</p>
-        <div class="row">
-          <a
-            [routerLink]="['/', 'details', todo.id]"
-            class="paper-btn btn-small"
-          >
-            Details
-          </a>
-          <a [routerLink]="['/', 'edit', todo.id]" class="paper-btn btn-small">
-            Edit
-          </a>
-          <button class="paper-btn btn-small" (click)="completeTask(id)">
-            Done
-          </button>
-        </div>
+<section class="container container-md">
+  <div class="row">
+    <div class="col sm-6">
+      <div class="filter-widget border border-2 padding margin">
+        <h4 class="filter-widget-title margin-small">Filter</h4>
+        <input
+          type="search"
+          name="filter"
+          placeholder="Search for task here"
+          [(ngModel)]="filter"
+          (keyup)="filterTasks()"
+        />
+        <h4 class="filter-widget-title margin-small">Sort by</h4>
+        <fieldset class="form-group row flex-middle flex-spaces">
+          <label for="Priority" class="paper-radio">
+            <input type="radio" name="paperRadios" id="Priority" [(ngModel)]="sortBy" value="priority"> <span>Priority</span>
+          </label>
+          <label for="Date" class="paper-radio">
+            <input type="radio" name="paperRadios" id="Date" [(ngModel)]="sortBy" value="date"> <span>Date</span>
+          </label>
+          <label for="noSort" class="paper-radio">
+            <input type="radio" name="paperRadios" id="noSort" [(ngModel)]="sortBy" value=""> <span>Don't Sort</span>
+          </label>
+        </fieldset>
       </div>
-    }
-  } @else {
-    <p>Loading...</p>
-  }
+      <app-task-add />
+      <hr class="margin" />
+
+    </div>
+    <div class="col sm-6">
+      @if (todolist().length > 0) {
+        <h4 class="margin-small">Remember to</h4>
+        @for (todo of todolist(); track id; let id = $index) {
+          <div class="border padding-small margin-small">
+            <p>{{ todo.content }}</p>
+            <div class="row">
+              <a
+                [routerLink]="['/', 'details', todo.id]"
+                class="paper-btn btn-small"
+              >
+                Details
+              </a>
+              <a [routerLink]="['/', 'edit', todo.id]" class="paper-btn btn-small">
+                Edit
+              </a>
+              <button class="paper-btn btn-small" (click)="completeTask(id)">
+                Done
+              </button>
+            </div>
+          </div>
+        }
+      } @else {
+        <p>Loading...</p>
+      }
+    </div>
+  </div>
+
+  
 </section>
