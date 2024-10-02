@@ -1,14 +1,27 @@
 <section class="container container-xs">
+  <div class="filter-widget border border-2 padding margin">
+    <h4 class="filter-widget-title margin-small">Filter</h4>
+    <input
+      type="search"
+      name="filter"
+      placeholder="Search for task here"
+      [(ngModel)]="filter"
+      (keyup)="filterTasks()"
+    />
+    <h4 class="filter-widget-title margin-small">Sort by</h4>
+    <fieldset class="form-group row flex-middle flex-spaces">
+      <label for="Priority" class="paper-radio">
+        <input type="radio" name="paperRadios" id="Priority" [(ngModel)]="sortBy" (onclick)="filterTasks()" value="priority"> <span>Priority</span>
+      </label>
+      <label for="Date" class="paper-radio">
+        <input type="radio" name="paperRadios" id="Date" [(ngModel)]="sortBy" (onclick)="filterTasks()" value="date"> <span>Date</span>
+      </label>
+      <label for="noSort" class="paper-radio">
+        <input type="radio" name="paperRadios" id="noSort" [(ngModel)]="sortBy" (onclick)="filterTasks()" value="none"> <span>Don't Sort</span>
+      </label>
+    </fieldset>
+  </div>
   @if (todolist().length > 0) {
-    <div class="filter-widget border border-2 padding">
-      <h4 class="filter-widget-title margin-small">Filter</h4>
-      <input
-        type="search"
-        name="filter"
-        [(ngModel)]="taskService.filter"
-        (keyup)="filterTasks()"
-      />
-    </div>
     <app-task-add />
     <hr class="margin" />
     <h4 class="margin-small">Remember to</h4>

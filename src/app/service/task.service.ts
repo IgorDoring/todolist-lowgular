@@ -30,24 +30,13 @@ export class TaskService {
             id: task.id,
             content: task.content,
             isCompleted: task.is_completed,
+            priority: task.priority,
+            url: task.url,
           })),
         ),
       ),
     { initialValue: [] },
   );
-  filter: Signal<string> = signal('');
-
-  filterTasks() {
-    const filteredList: Signal<TaskModel[]> = computed(() => {
-      return this.listSignal().filter((task) => {
-        if (this.filter().trim() !== '') {
-          return task.content.toLocaleLowerCase().includes(this.filter());
-        }
-        return true;
-      });
-    });
-    return filteredList();
-  }
 
   // TODO: add tosignal to get tasks
   loadTask(taskId: string) {
