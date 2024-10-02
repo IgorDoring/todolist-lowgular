@@ -22,12 +22,13 @@ import { TaskAddComponent } from '../task-add/task-add.component';
 })
 export class HomeComponent {
   taskService: TaskService = inject(TaskService);
-  todolist: Signal<TaskModel[]> = this.taskService.listSignal;
+  todolist: Signal<TaskModel[]> = computed(() => {
+    return this.taskService.listSignal();
+  });
   sortBy: Signal<string> = signal('');
   filter: Signal<string> = signal('');
 
   filterTasks() {
-    console.log(this.todolist());
     this.todolist = computed(() => {
       return this.taskService
         .listSignal()

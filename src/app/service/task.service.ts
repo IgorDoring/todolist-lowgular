@@ -1,4 +1,4 @@
-import { inject, Injectable, Signal } from '@angular/core';
+import { computed, inject, Injectable, Signal } from '@angular/core';
 import { TaskModel, TaskResponse } from '../model/task.model';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -47,13 +47,23 @@ export class TaskService {
 
   addTask(taskForm: string) {
     this.http
-      .post<TaskModel>(
+      .post<TaskResponse>(
         'https://api.todoist.com/rest/v2/tasks',
         taskForm,
         this.headers,
       )
+      .pipe(
+        map((task: TaskResponse) => ({
+          id: task.id,
+          content: task.content,
+          isCompleted: task.is_completed,
+          priority: task.priority,
+          url: task.url,
+          createdAt: task.created_at,
+        })),
+      )
       .subscribe({
-        next: (newTask) => {
+        next: (newTask: TaskModel) => {
           this.listSignal().push(newTask);
         },
       });
