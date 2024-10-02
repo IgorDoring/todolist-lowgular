@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, computed, inject, signal, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TaskModel, TaskResponse } from '../../model/task.model';
+import { TaskModel } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
 import { RouterModule } from '@angular/router';
 import { TaskAddComponent } from '../task-add/task-add.component';
-import { TaskSearchComponent } from '../task-search/task-search.component';
 
 @Component({
   selector: 'app-home',
@@ -17,14 +16,13 @@ import { TaskSearchComponent } from '../task-search/task-search.component';
     FormsModule,
     RouterModule,
     TaskAddComponent,
-    TaskSearchComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
   taskService: TaskService = inject(TaskService);
-  todolist: Signal<TaskResponse[]> = this.taskService.listSignal;
+  todolist: Signal<TaskModel[]> = this.taskService.listSignal;
   sortBy: Signal<string> = signal('');
   filter: Signal<string> = signal('');
 
@@ -36,6 +34,10 @@ export class HomeComponent {
         .sort((a: TaskModel, b: TaskModel) => {
           if (this.sortBy() === 'priority') {
             return b.priority - a.priority;
+          } else if (this.sortBy() === 'date') {
+            const aDate = new Date(a.createdAt);
+            const bDate = new Date(b.createdAt);
+            return bDate.getTime() - aDate.getTime();
           }
           return a.id.localeCompare(b.id);
         })

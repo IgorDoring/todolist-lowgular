@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { TaskService } from '../../service/task.service';
-import { TaskResponse } from '../../model/task.model';
+import { TaskModel } from '../../model/task.model';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,7 +15,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 })
 export class TaskEditComponent {
   taskService: TaskService = inject(TaskService);
-  task!: TaskResponse | undefined;
+  task!: TaskModel | undefined;
   taskForm!: { id: string; content: string };
 
   @Input() set id(id: string) {

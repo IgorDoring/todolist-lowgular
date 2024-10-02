@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal, Signal } from '@angular/core';
+import { inject, Injectable, Signal } from '@angular/core';
 import { TaskModel, TaskResponse } from '../model/task.model';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -32,6 +32,7 @@ export class TaskService {
             isCompleted: task.is_completed,
             priority: task.priority,
             url: task.url,
+            createdAt: task.created_at,
           })),
         ),
       ),
@@ -46,7 +47,7 @@ export class TaskService {
 
   addTask(taskForm: string) {
     this.http
-      .post<TaskResponse>(
+      .post<TaskModel>(
         'https://api.todoist.com/rest/v2/tasks',
         taskForm,
         this.headers,
@@ -61,7 +62,7 @@ export class TaskService {
   //TODO: implement reactivity
   editTask(taskId: string, taskForm: string) {
     this.http
-      .post<TaskResponse>(
+      .post<TaskModel>(
         'https://api.todoist.com/rest/v2/tasks/' + taskId,
         taskForm,
         this.headers,

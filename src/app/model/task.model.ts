@@ -4,6 +4,7 @@ export interface TaskResponse {
   content: string;
   priority: number;
   url: string;
+  created_at: string;
 }
 
 export interface TaskModel {
@@ -12,4 +13,5 @@ export interface TaskModel {
   content: string;
   url: string;
   priority: number;
+  createdAt: string;
 }

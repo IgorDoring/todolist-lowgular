@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { TaskResponse } from '../../model/task.model';
+import { TaskModel } from '../../model/task.model';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskService } from '../../service/task.service';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
 })
 export class TaskDetailComponent {
   taskService = inject(TaskService);
-  task!: TaskResponse | undefined;
+  task!: TaskModel | undefined;
 
   @Input() set id(id: string) {
     this.task = this.taskService.loadTask(id);
