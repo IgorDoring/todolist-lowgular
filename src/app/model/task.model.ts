@@ -1,11 +1,15 @@
 export interface TaskResponse {
+  id: string;
   is_completed?: boolean;
   content: string;
-  id: string;
+  priority: number;
+  url: string;
 }
 
 export interface TaskModel {
+  id: string;
   isCompleted?: boolean;
   content: string;
-  id: string;
+  url: string;
+  priority: number;
 }
