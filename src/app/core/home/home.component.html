@@ -13,34 +13,70 @@
         <h4 class="filter-widget-title margin-small">Sort by</h4>
         <fieldset class="form-group row flex-middle flex-spaces">
           <label for="Priority" class="paper-radio">
-            <input type="radio" name="paperRadios" id="Priority" [(ngModel)]="sortBy" value="priority"> <span>Priority</span>
+            <input
+              type="radio"
+              name="paperRadios"
+              id="Priority"
+              [(ngModel)]="sortBy"
+              value="priority"
+            />
+            <span>Priority</span>
           </label>
           <label for="Date" class="paper-radio">
-            <input type="radio" name="paperRadios" id="Date" [(ngModel)]="sortBy" value="date"> <span>Date</span>
+            <input
+              type="radio"
+              name="paperRadios"
+              id="Date"
+              [(ngModel)]="sortBy"
+              value="date"
+            />
+            <span>Date</span>
           </label>
           <label for="noSort" class="paper-radio">
-            <input type="radio" name="paperRadios" id="noSort" [(ngModel)]="sortBy" value=""> <span>Don't Sort</span>
+            <input
+              type="radio"
+              name="paperRadios"
+              id="noSort"
+              [(ngModel)]="sortBy"
+              value=""
+            />
+            <span>Don't Sort</span>
           </label>
         </fieldset>
       </div>
       <app-task-add />
       <hr class="margin" />
-
     </div>
     <div class="col sm-6">
       @if (todolist().length > 0) {
         <h4 class="margin-small">Remember to</h4>
         @for (todo of todolist(); track id; let id = $index) {
           <div class="border padding-small margin-small">
-            <p>{{ todo.content }}</p>
+            @if (selectedTask() === todo.id) {
+              <p>Priority: P{{ todo.priority }}</p>
+              <p>Nº: {{ todo.id }}</p>
+              <p>Content: {{ todo.content }}</p>
+              <p>Created at: {{ todo.createdAt | date }}</p>
+              <p>
+                Go to task: <a [routerLink]="todo.url">{{ todo.url }}</a>
+              </p>
+            } @else {
+              <p>{{ todo.content }}</p>
+            }
             <div class="row">
+              @if (selectedTask() === todo.id){
+                <button (click)="hideDetails()" class="paper-btn btn-small">
+                  Show Less
+                </button>
+              }@else {
+                <button (click)="showMoreDetails(todo.id)" class="paper-btn btn-small">
+                  Show More
+                </button>
+              }
               <a
-                [routerLink]="['/', 'details', todo.id]"
+                [routerLink]="['/', 'edit', todo.id]"
                 class="paper-btn btn-small"
               >
-                Details
-              </a>
-              <a [routerLink]="['/', 'edit', todo.id]" class="paper-btn btn-small">
                 Edit
               </a>
               <button class="paper-btn btn-small" (click)="completeTask(id)">
@@ -49,11 +85,11 @@
             </div>
           </div>
         }
+      } @else if (todolist().length === 0 && filter() !== "") {
+        <p>No Tasks found!</p>
       } @else {
         <p>Loading...</p>
       }
     </div>
   </div>
-
-  
 </section>

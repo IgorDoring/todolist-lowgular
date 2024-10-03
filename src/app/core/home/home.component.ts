@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, computed, inject, signal, Signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskModel } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
@@ -27,6 +34,7 @@ export class HomeComponent {
   });
   sortBy: Signal<string> = signal('');
   filter: Signal<string> = signal('');
+  selectedTask: WritableSignal<string> = signal('');
 
   filterTasks() {
     this.todolist = computed(() => {
@@ -51,6 +59,14 @@ export class HomeComponent {
           return true;
         });
     });
+  }
+
+  showMoreDetails(taskId: string) {
+    this.selectedTask.set(taskId);
+  }
+
+  hideDetails(){
+    this.selectedTask.set('');
   }
 
   completeTask(taskIndex: number) {
