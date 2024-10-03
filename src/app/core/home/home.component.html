@@ -87,9 +87,9 @@
               <p>Priority: P{{ todo.priority }}</p>
               <p>Nº: {{ todo.id }}</p>
               <p>Content: {{ todo.content }}</p>
-              <p>Created at: {{ todo.createdAt | date : 'short'  }}</p>
+              <p>Created at: {{ todo.createdAt | date : 'dd/MM/yy, h:mm'  }}</p>
               <p>
-                Go to task: <a [routerLink]="todo.url">{{ todo.url }}</a>
+                Go to task on app: <a [href]="todo.url">{{ todo.url }}</a>
               </p>
             } @else {
               <p>{{ todo.content }}</p>
