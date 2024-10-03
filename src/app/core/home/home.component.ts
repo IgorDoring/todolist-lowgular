@@ -30,7 +30,26 @@ import { TaskAddComponent } from '../task-add/task-add.component';
 export class HomeComponent {
   taskService: TaskService = inject(TaskService);
   todolist: Signal<TaskModel[]> = computed(() => {
-    return this.taskService.listSignal();
+    return this.taskService
+      .listSignal()
+      .sort((a: TaskModel, b: TaskModel) => {
+        if (this.sortBy() === 'priority') {
+          return b.priority - a.priority;
+        } else if (this.sortBy() === 'date') {
+          const aDate = new Date(a.createdAt);
+          const bDate = new Date(b.createdAt);
+          return bDate.getTime() - aDate.getTime();
+        }
+        return a.id.localeCompare(b.id);
+      })
+      .filter((task) => {
+        if (this.filter().trim() !== '') {
+          return task.content
+            .toLocaleLowerCase()
+            .includes(this.filter().toLocaleLowerCase());
+        }
+        return true;
+      });
   });
   sortBy: Signal<string> = signal('');
   filter: Signal<string> = signal('');
@@ -42,33 +61,7 @@ export class HomeComponent {
     priority: 0,
   };
 
-  filterTasks() {
-    this.todolist = computed(() => {
-      return this.taskService
-        .listSignal()
-        .sort((a: TaskModel, b: TaskModel) => {
-          if (this.sortBy() === 'priority') {
-            return b.priority - a.priority;
-          } else if (this.sortBy() === 'date') {
-            const aDate = new Date(a.createdAt);
-            const bDate = new Date(b.createdAt);
-            return bDate.getTime() - aDate.getTime();
-          }
-          return a.id.localeCompare(b.id);
-        })
-        .filter((task) => {
-          if (this.filter().trim() !== '') {
-            return task.content
-              .toLocaleLowerCase()
-              .includes(this.filter().toLocaleLowerCase());
-          }
-          return true;
-        });
-    });
-  }
-
   onSubmit(taskForm: NgForm) {
-    console.log(JSON.stringify(this.taskForm));
     if (taskForm.valid) {
       this.taskService.editTask(
         this.taskForm.id,
