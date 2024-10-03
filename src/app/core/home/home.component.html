@@ -46,17 +46,49 @@
       </div>
       <app-task-add />
       <hr class="margin" />
+      @if (taskForm.id !== "") {
+        <section class="border border-3 padding">
+          <h4 class="margin-none">Edit Task</h4>
+          <form (ngSubmit)="onSubmit(myForm)" #myForm="ngForm">
+            <div class="form-group">
+              <select
+                id="priority"
+                name="priority"
+                [(ngModel)]="taskForm.priority"
+              >
+                @for (p of [1, 2, 3, 4]; track $index) {
+                  <option [value]="p">Priority {{ p }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-group">
+              <input
+                required
+                type="text"
+                name="content"
+                [(ngModel)]="taskForm.content"
+              />
+            </div>
+            <div class="form-group margin-top-small">
+              <button type="submit" [disabled]="myForm.invalid">Send</button>
+            </div>
+          </form>
+          <button (click)="clearEdit()" class="paper-btn btn-block">
+            Cancel Edit
+          </button>
+        </section>
+      }
     </div>
     <div class="col sm-6">
       @if (todolist().length > 0) {
         <h4 class="margin-small">Remember to</h4>
         @for (todo of todolist(); track id; let id = $index) {
           <div class="border padding-small margin-small">
-            @if (selectedTask() === todo.id) {
+            @if (taskDetails() === todo.id) {
               <p>Priority: P{{ todo.priority }}</p>
               <p>Nº: {{ todo.id }}</p>
               <p>Content: {{ todo.content }}</p>
-              <p>Created at: {{ todo.createdAt | date }}</p>
+              <p>Created at: {{ todo.createdAt | date : 'short'  }}</p>
               <p>
                 Go to task: <a [routerLink]="todo.url">{{ todo.url }}</a>
               </p>
@@ -64,21 +96,21 @@
               <p>{{ todo.content }}</p>
             }
             <div class="row">
-              @if (selectedTask() === todo.id){
+              @if (taskDetails() === todo.id) {
                 <button (click)="hideDetails()" class="paper-btn btn-small">
                   Show Less
                 </button>
-              }@else {
-                <button (click)="showMoreDetails(todo.id)" class="paper-btn btn-small">
+              } @else {
+                <button
+                  (click)="showMoreDetails(todo.id)"
+                  class="paper-btn btn-small"
+                >
                   Show More
                 </button>
               }
-              <a
-                [routerLink]="['/', 'edit', todo.id]"
-                class="paper-btn btn-small"
-              >
-                Edit
-              </a>
+              <button class="paper-btn btn-small" (click)="editTask(todo)">
+                Live Edit
+              </button>
               <button class="paper-btn btn-small" (click)="completeTask(id)">
                 Done
               </button>

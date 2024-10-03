@@ -8,7 +8,7 @@ import {
   Signal,
   WritableSignal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { TaskModel } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
 import { RouterModule } from '@angular/router';
@@ -34,7 +34,13 @@ export class HomeComponent {
   });
   sortBy: Signal<string> = signal('');
   filter: Signal<string> = signal('');
-  selectedTask: WritableSignal<string> = signal('');
+  taskDetails: WritableSignal<string> = signal('');
+  liveEditTask: WritableSignal<TaskModel> = signal({} as TaskModel);
+  taskForm: { id: string; content: string; priority: number } = {
+    id: '',
+    content: '',
+    priority: 0,
+  };
 
   filterTasks() {
     this.todolist = computed(() => {
@@ -61,12 +67,32 @@ export class HomeComponent {
     });
   }
 
-  showMoreDetails(taskId: string) {
-    this.selectedTask.set(taskId);
+  onSubmit(taskForm: NgForm) {
+    console.log(JSON.stringify(this.taskForm));
+    if (taskForm.valid) {
+      this.taskService.editTask(
+        this.taskForm.id,
+        JSON.stringify(this.taskForm),
+      );
+      this.clearEdit();
+    }
+  }
+  editTask(task: TaskModel) {
+    this.taskForm.id = task.id;
+    this.taskForm.content = task.content;
+    this.taskForm.priority = task.priority;
   }
 
-  hideDetails(){
-    this.selectedTask.set('');
+  clearEdit() {
+    this.taskForm = { id: '', content: '', priority: 0 };
+  }
+
+  showMoreDetails(taskId: string) {
+    this.taskDetails.set(taskId);
+  }
+
+  hideDetails() {
+    this.taskDetails.set('');
   }
 
   completeTask(taskIndex: number) {

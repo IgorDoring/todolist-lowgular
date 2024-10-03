@@ -72,18 +72,27 @@ export class TaskService {
   //TODO: implement reactivity
   editTask(taskId: string, taskForm: string) {
     this.http
-      .post<TaskModel>(
+      .post<TaskResponse>(
         'https://api.todoist.com/rest/v2/tasks/' + taskId,
         taskForm,
         this.headers,
       )
+      .pipe(
+        map((task: TaskResponse) => ({
+          id: task.id,
+          content: task.content,
+          isCompleted: task.is_completed,
+          priority: task.priority,
+          url: task.url,
+          createdAt: task.created_at,
+        })),
+      )
       .subscribe({
-        next: (eTask) => {
+        next: (eTask: TaskModel) => {
           const eTaskIndex = this.listSignal().findIndex(
             (task) => task.id == eTask.id,
           );
           this.listSignal()[eTaskIndex] = eTask;
-          this.router.navigate(['/', 'details', taskId]);
         },
       });
   }
