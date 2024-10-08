@@ -45,6 +45,10 @@ export class TaskService {
     return task;
   }
 
+  loadTasks() {
+    return this.listSignal();
+  }
+
   addTask(taskForm: string) {
     this.http
       .post<TaskResponse>(

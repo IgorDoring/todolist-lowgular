@@ -31,7 +31,7 @@ export class HomeComponent {
   taskService: TaskService = inject(TaskService);
   todolist: Signal<TaskModel[]> = computed(() => {
     return this.taskService
-      .listSignal()
+      .loadTasks()
       .sort((a: TaskModel, b: TaskModel) => {
         if (this.sortBy() === 'priority') {
           return b.priority - a.priority;
