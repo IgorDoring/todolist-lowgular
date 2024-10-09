@@ -31,7 +31,7 @@ export class HomeComponent {
   taskService: TaskService = inject(TaskService);
   todolist: Signal<TaskModel[]> = computed(() => {
     return this.taskService
-      .loadTasks()
+      .listSignal()
       .sort((a: TaskModel, b: TaskModel) => {
         if (this.sortBy() === 'priority') {
           return b.priority - a.priority;
@@ -88,7 +88,7 @@ export class HomeComponent {
     this.taskDetails.set('');
   }
 
-  completeTask(taskIndex: number) {
+  completeTask(taskIndex: string) {
     if (confirm('Have you really completed this task?')) {
       this.taskService.completeTask(taskIndex);
     }

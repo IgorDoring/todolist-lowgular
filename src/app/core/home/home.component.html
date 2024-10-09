@@ -81,7 +81,7 @@
     <div class="col sm-6">
       @if (todolist().length > 0) {
         <h4 class="margin-small">Remember to</h4>
-        @for (todo of todolist(); track id; let id = $index) {
+        @for (todo of todolist(); track todo) {
           <div class="border padding-small margin-small">
             @if (taskDetails() === todo.id) {
               <p>Priority: P{{ todo.priority }}</p>
@@ -110,7 +110,7 @@
               <button class="paper-btn btn-small" (click)="editTask(todo)">
                 Live Edit
               </button>
-              <button class="paper-btn btn-small" (click)="completeTask(id)">
+              <button class="paper-btn btn-small" (click)="completeTask(todo.id)">
                 Done
               </button>
             </div>

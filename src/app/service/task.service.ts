@@ -102,12 +102,10 @@ export class TaskService {
   }
 
   // TODO: implement reactivity
-  completeTask(taskIndex: number) {
+  completeTask(taskId: string) {
     this.http
       .post(
-        'https://api.todoist.com/rest/v2/tasks/' +
-          this.listSignal()[taskIndex].id +
-          '/close',
+        'https://api.todoist.com/rest/v2/tasks/' + taskId + '/close',
         null,
         {
           headers: {
@@ -118,6 +116,9 @@ export class TaskService {
       )
       .subscribe({
         next: () => {
+          const taskIndex = this.listSignal().findIndex(
+            (task) => task.id == taskId,
+          );
           this.listSignal().splice(taskIndex, 1);
         },
       });
