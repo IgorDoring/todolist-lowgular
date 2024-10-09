@@ -29,30 +29,9 @@ import { TaskAddComponent } from '../task-add/task-add.component';
 })
 export class HomeComponent {
   taskService: TaskService = inject(TaskService);
-  todolist: Signal<TaskModel[]> = computed(() => {
-    return this.taskService
-      .listSignal()
-      .sort((a: TaskModel, b: TaskModel) => {
-        if (this.sortBy() === 'priority') {
-          return b.priority - a.priority;
-        } else if (this.sortBy() === 'date') {
-          const aDate = new Date(a.createdAt);
-          const bDate = new Date(b.createdAt);
-          return bDate.getTime() - aDate.getTime();
-        }
-        return a.id.localeCompare(b.id);
-      })
-      .filter((task) => {
-        if (this.filter().trim() !== '') {
-          return task.content
-            .toLocaleLowerCase()
-            .includes(this.filter().toLocaleLowerCase());
-        }
-        return true;
-      });
-  });
-  sortBy: Signal<string> = signal('');
-  filter: Signal<string> = signal('');
+  todolist: Signal<TaskModel[]> = this.taskService.todolist;
+  sortBy: Signal<string> = this.taskService.sortBy;
+  filter: Signal<string> = this.taskService.filter;
   taskDetails: WritableSignal<string> = signal('');
   liveEditTask: WritableSignal<TaskModel> = signal({} as TaskModel);
   taskForm: { id: string; content: string; priority: number } = {

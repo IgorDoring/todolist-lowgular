@@ -1,4 +1,4 @@
-import { inject, Injectable, Signal } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { TaskModel, TaskResponse } from '../model/task.model';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -39,6 +39,30 @@ export class TaskService {
     { initialValue: [] },
   );
 
+  todolist: Signal<TaskModel[]> = computed(() => {
+    return this.listSignal()
+      .sort((a: TaskModel, b: TaskModel) => {
+        if (this.sortBy() === 'priority') {
+          return b.priority - a.priority;
+        } else if (this.sortBy() === 'date') {
+          const aDate = new Date(a.createdAt);
+          const bDate = new Date(b.createdAt);
+          return bDate.getTime() - aDate.getTime();
+        }
+        return a.id.localeCompare(b.id);
+      })
+      .filter((task) => {
+        if (this.filter().trim() !== '') {
+          return task.content
+            .toLocaleLowerCase()
+            .includes(this.filter().toLocaleLowerCase());
+        }
+        return true;
+      });
+  });
+  sortBy: Signal<string> = signal('');
+  filter: Signal<string> = signal('');
+
   // TODO: add tosignal to get tasks
   loadTask(taskId: string) {
     const task = this.listSignal().find((task) => task.id === taskId);
@@ -68,7 +92,7 @@ export class TaskService {
       )
       .subscribe({
         next: (newTask: TaskModel) => {
-          this.listSignal().push(newTask);
+          this.todolist().push(newTask);
         },
       });
   }
@@ -93,10 +117,10 @@ export class TaskService {
       )
       .subscribe({
         next: (eTask: TaskModel) => {
-          const eTaskIndex = this.listSignal().findIndex(
+          const eTaskIndex = this.todolist().findIndex(
             (task) => task.id == eTask.id,
           );
-          this.listSignal()[eTaskIndex] = eTask;
+          this.todolist()[eTaskIndex] = eTask;
         },
       });
   }
@@ -116,10 +140,10 @@ export class TaskService {
       )
       .subscribe({
         next: () => {
-          const taskIndex = this.listSignal().findIndex(
+          const taskIndex = this.todolist().findIndex(
             (task) => task.id == taskId,
           );
-          this.listSignal().splice(taskIndex, 1);
+          this.todolist().splice(taskIndex, 1);
         },
       });
   }
