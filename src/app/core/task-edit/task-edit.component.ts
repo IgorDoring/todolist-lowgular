@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TaskService } from '../../service/task.service';
 import { TaskModel } from '../../model/task.model';
 import { RouterModule } from '@angular/router';
@@ -15,20 +15,23 @@ import { FormsModule, NgForm } from '@angular/forms';
 })
 export class TaskEditComponent {
   taskService: TaskService = inject(TaskService);
-  task!: TaskModel | undefined;
-  taskForm!: { id: string; content: string };
+  taskForm!: { id: string; content: string; priority: number };
+  @Output() editedTask = new EventEmitter<boolean>();
 
-  @Input() set id(id: string) {
-    this.task = this.taskService.loadTask(id);
-    this.taskForm = { id: this.task!.id, content: this.task!.content };
-    // this.task$ = this.taskService.loadTask(id).pipe(
-    //   tap((task) => {
-    //     this.taskForm = {
-    //       id: task.id,
-    //       content: task.content,
-    //     };
-    //   }),
-    // );
+  @Input() set task(task: TaskModel) {
+    this.taskForm = {
+      id: task.id,
+      content: task.content,
+      priority: task.priority,
+    };
+  }
+
+  clearEdit() {
+    this.taskForm = {
+      id: '',
+      content: '',
+      priority: 0,
+    };
   }
 
   onSubmit(taskForm: NgForm) {
@@ -37,6 +40,8 @@ export class TaskEditComponent {
         this.taskForm.id,
         JSON.stringify(this.taskForm),
       );
+      this.clearEdit();
+      this.editedTask.emit(true);
     }
   }
 }

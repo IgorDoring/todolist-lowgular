@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {
   Component,
-  computed,
   inject,
   signal,
   Signal,
@@ -13,6 +12,8 @@ import { TaskModel } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
 import { RouterModule } from '@angular/router';
 import { TaskAddComponent } from '../task-add/task-add.component';
+import { TaskSearchComponent } from '../task-search/task-search.component';
+import { TaskEditComponent } from '../task-edit/task-edit.component';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,8 @@ import { TaskAddComponent } from '../task-add/task-add.component';
     FormsModule,
     RouterModule,
     TaskAddComponent,
+    TaskSearchComponent,
+    TaskEditComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -30,41 +33,25 @@ import { TaskAddComponent } from '../task-add/task-add.component';
 export class HomeComponent {
   taskService: TaskService = inject(TaskService);
   todolist: Signal<TaskModel[]> = this.taskService.todolist;
-  sortBy: Signal<string> = this.taskService.sortBy;
-  filter: Signal<string> = this.taskService.filter;
-  taskDetails: WritableSignal<string> = signal('');
-  liveEditTask: WritableSignal<TaskModel> = signal({} as TaskModel);
-  taskForm: { id: string; content: string; priority: number } = {
-    id: '',
-    content: '',
-    priority: 0,
-  };
+  taskAction: WritableSignal<{ task: TaskModel; action: string }> = signal({
+    task: {} as TaskModel,
+    action: '',
+  });
 
-  onSubmit(taskForm: NgForm) {
-    if (taskForm.valid) {
-      this.taskService.editTask(
-        this.taskForm.id,
-        JSON.stringify(this.taskForm),
-      );
-      this.clearEdit();
-    }
-  }
-  editTask(task: TaskModel) {
-    this.taskForm.id = task.id;
-    this.taskForm.content = task.content;
-    this.taskForm.priority = task.priority;
-  }
-
-  clearEdit() {
-    this.taskForm = { id: '', content: '', priority: 0 };
-  }
-
-  showMoreDetails(taskId: string) {
-    this.taskDetails.set(taskId);
+  showMoreDetails(task: TaskModel) {
+    this.taskAction.set({ task: task, action: 'details' });
   }
 
   hideDetails() {
-    this.taskDetails.set('');
+    this.taskAction.set({ task: {} as TaskModel, action: '' });
+  }
+
+  editTask(task: TaskModel) {
+    this.taskAction.set({ task: task, action: 'edit' });
+  }
+
+  onEditedTask() {
+    this.taskAction.set({ task: {} as TaskModel, action: '' });
   }
 
   completeTask(taskIndex: string) {

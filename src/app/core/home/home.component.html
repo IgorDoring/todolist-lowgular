@@ -1,81 +1,11 @@
 <section class="container container-md">
   <div class="row">
     <div class="col sm-6">
-      <div class="filter-widget border border-2 padding margin">
-        <h4 class="filter-widget-title margin-small">Filter</h4>
-        <input
-          type="search"
-          name="filter"
-          placeholder="Search for task here"
-          [(ngModel)]="filter"
-        />
-        <h4 class="filter-widget-title margin-small">Sort by</h4>
-        <fieldset class="form-group row flex-middle flex-spaces">
-          <label for="Priority" class="paper-radio">
-            <input
-              type="radio"
-              name="paperRadios"
-              id="Priority"
-              [(ngModel)]="sortBy"
-              value="priority"
-            />
-            <span>Priority</span>
-          </label>
-          <label for="Date" class="paper-radio">
-            <input
-              type="radio"
-              name="paperRadios"
-              id="Date"
-              [(ngModel)]="sortBy"
-              value="date"
-            />
-            <span>Date</span>
-          </label>
-          <label for="noSort" class="paper-radio">
-            <input
-              type="radio"
-              name="paperRadios"
-              id="noSort"
-              [(ngModel)]="sortBy"
-              value=""
-            />
-            <span>Don't Sort</span>
-          </label>
-        </fieldset>
-      </div>
+      <app-task-search />
       <app-task-add />
       <hr class="margin" />
-      @if (taskForm.id !== "") {
-        <section class="border border-3 padding">
-          <h4 class="margin-none">Edit Task</h4>
-          <form (ngSubmit)="onSubmit(myForm)" #myForm="ngForm">
-            <div class="form-group">
-              <select
-                id="priority"
-                name="priority"
-                [(ngModel)]="taskForm.priority"
-              >
-                @for (p of [1, 2, 3, 4]; track $index) {
-                  <option [value]="p">Priority {{ p }}</option>
-                }
-              </select>
-            </div>
-            <div class="form-group">
-              <input
-                required
-                type="text"
-                name="content"
-                [(ngModel)]="taskForm.content"
-              />
-            </div>
-            <div class="form-group margin-top-small">
-              <button type="submit" [disabled]="myForm.invalid">Send</button>
-            </div>
-          </form>
-          <button (click)="clearEdit()" class="paper-btn btn-block">
-            Cancel Edit
-          </button>
-        </section>
+      @if (taskAction().action === "edit") {
+        <app-task-edit [task]="taskAction().task" (editedTask)="onEditedTask()" />
       }
     </div>
     <div class="col sm-6">
@@ -83,11 +13,11 @@
         <h4 class="margin-small">Remember to</h4>
         @for (todo of todolist(); track todo) {
           <div class="border padding-small margin-small">
-            @if (taskDetails() === todo.id) {
+            @if (taskAction().action === "details" && taskAction().task.id === todo.id) {
               <p>Priority: P{{ todo.priority }}</p>
               <p>Nº: {{ todo.id }}</p>
               <p>Content: {{ todo.content }}</p>
-              <p>Created at: {{ todo.createdAt | date : 'dd/MM/yy, h:mm'  }}</p>
+              <p>Created at: {{ todo.createdAt | date: "dd/MM/yy, h:mm" }}</p>
               <p>
                 Go to task on app: <a [href]="todo.url">{{ todo.url }}</a>
               </p>
@@ -95,13 +25,13 @@
               <p>{{ todo.content }}</p>
             }
             <div class="row">
-              @if (taskDetails() === todo.id) {
+              @if (taskAction().task.id === todo.id) {
                 <button (click)="hideDetails()" class="paper-btn btn-small">
                   Show Less
                 </button>
               } @else {
                 <button
-                  (click)="showMoreDetails(todo.id)"
+                  (click)="showMoreDetails(todo)"
                   class="paper-btn btn-small"
                 >
                   Show More
@@ -110,13 +40,16 @@
               <button class="paper-btn btn-small" (click)="editTask(todo)">
                 Live Edit
               </button>
-              <button class="paper-btn btn-small" (click)="completeTask(todo.id)">
+              <button
+                class="paper-btn btn-small"
+                (click)="completeTask(todo.id)"
+              >
                 Done
               </button>
             </div>
           </div>
         }
-      } @else if (todolist().length === 0 && filter() !== "") {
+      } @else if (todolist().length === 0) {
         <p>No Tasks found!</p>
       } @else {
         <p>Loading...</p>
