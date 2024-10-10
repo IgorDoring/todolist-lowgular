@@ -63,16 +63,6 @@ export class TaskService {
   sortBy: Signal<string> = signal('');
   filter: Signal<string> = signal('');
 
-  // TODO: add tosignal to get tasks
-  loadTask(taskId: string) {
-    const task = this.listSignal().find((task) => task.id === taskId);
-    return task;
-  }
-
-  loadTasks() {
-    return this.listSignal();
-  }
-
   addTask(taskForm: string) {
     this.http
       .post<TaskResponse>(
@@ -143,7 +133,9 @@ export class TaskService {
           const taskIndex = this.todolist().findIndex(
             (task) => task.id == taskId,
           );
-          this.todolist().splice(taskIndex, 1);
+          if (taskIndex > -1) {
+            this.todolist().splice(taskIndex, 1);
+          }
         },
       });
   }

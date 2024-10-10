@@ -32,6 +32,7 @@ export class TaskEditComponent {
       content: '',
       priority: 0,
     };
+    this.editedTask.emit(true);
   }
 
   onSubmit(taskForm: NgForm) {

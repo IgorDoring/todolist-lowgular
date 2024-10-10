@@ -4,7 +4,7 @@
       <app-task-search />
       <app-task-add />
       <hr class="margin" />
-      @if (taskAction().action === "edit") {
+      @if (taskAction().action === "edit" && taskAction().task.id !== '') {
         <app-task-edit [task]="taskAction().task" (editedTask)="onEditedTask()" />
       }
     </div>
