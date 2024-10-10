@@ -1,0 +1,42 @@
+<div class="filter-widget border border-2 padding margin">
+  <h4 class="filter-widget-title margin-small">Filter</h4>
+  <input
+    type="search"
+    name="filter"
+    placeholder="Search for task here"
+    [(ngModel)]="filter"
+  />
+  <h4 class="filter-widget-title margin-small">Sort by</h4>
+  <fieldset class="form-group row flex-middle flex-spaces">
+    <label for="Priority" class="paper-radio">
+      <input
+        type="radio"
+        name="paperRadios"
+        id="Priority"
+        [(ngModel)]="sortBy"
+        value="priority"
+      />
+      <span>Priority</span>
+    </label>
+    <label for="Date" class="paper-radio">
+      <input
+        type="radio"
+        name="paperRadios"
+        id="Date"
+        [(ngModel)]="sortBy"
+        value="date"
+      />
+      <span>Date</span>
+    </label>
+    <label for="noSort" class="paper-radio">
+      <input
+        type="radio"
+        name="paperRadios"
+        id="noSort"
+        [(ngModel)]="sortBy"
+        value=""
+      />
+      <span>Don't Sort</span>
+    </label>
+  </fieldset>
+</div>
