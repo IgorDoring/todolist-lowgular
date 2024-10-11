@@ -7,7 +7,7 @@ import {
   Signal,
   WritableSignal,
 } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { TaskModel } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
 import { RouterModule } from '@angular/router';

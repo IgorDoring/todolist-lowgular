@@ -83,6 +83,7 @@ export class TaskService {
       .subscribe({
         next: (newTask: TaskModel) => {
           this.todolist().push(newTask);
+          this.listSignal().push(newTask);
         },
       });
   }
@@ -107,10 +108,15 @@ export class TaskService {
       )
       .subscribe({
         next: (eTask: TaskModel) => {
-          const eTaskIndex = this.todolist().findIndex(
+          let eTaskIndex = this.todolist().findIndex(
             (task) => task.id == eTask.id,
           );
           this.todolist()[eTaskIndex] = eTask;
+
+          eTaskIndex = this.listSignal().findIndex(
+            (task) => task.id == eTask.id,
+          );
+          this.listSignal()[eTaskIndex] = eTask;
         },
       });
   }
@@ -130,11 +136,15 @@ export class TaskService {
       )
       .subscribe({
         next: () => {
-          const taskIndex = this.todolist().findIndex(
+          let taskIndex = this.todolist().findIndex(
             (task) => task.id == taskId,
           );
           if (taskIndex > -1) {
             this.todolist().splice(taskIndex, 1);
+          }
+          taskIndex = this.listSignal().findIndex((task) => task.id == taskId);
+          if (taskIndex > -1) {
+            this.listSignal().splice(taskIndex, 1);
           }
         },
       });
